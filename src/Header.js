@@ -1,4 +1,4 @@
-import colors from "./colors"
+import colors from "./services/colors"
 import styled from "styled-components"
 
 export default function Header() {
@@ -16,7 +16,7 @@ const TopBar = styled.div`
     justify-content: center;
     align-items: center;
     background-color: ${props => props.backColor};
-    width: 360px;
+    width: 100%;
     height: 90px;
     font-family: 'Roboto', sans-seriff;
     font-size: 40px;
