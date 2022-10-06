@@ -1,14 +1,12 @@
 import styled from "styled-components";
+import GlobalStyle from "./services/GlobalStyle";
 import Header from "./Header";
 import Films from "./Films";
 import Sessions from "./Sessions";
-import GlobalStyle from "./services/GlobalStyle"
-import { useState } from "react";
+import Seats from "./Seats";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 export default function App() {
-    
-    const [id, setId] = useState("")
     
     return (
         <>
@@ -19,8 +17,9 @@ export default function App() {
                     <Header />
 
                     <Routes>
-                        <Route path="/" element={<Films setId={setId}/>} />
-                        <Route path= {`/filme/:id`} element={<Sessions id={id}/>} />
+                        <Route path="/" element={<Films />} />
+                        <Route path="/filme/:filmeID" element={<Sessions />} />
+                        <Route path="/sessao/:sessaoID" element={<Seats />} />
                     </Routes>
 
                 </Container>
