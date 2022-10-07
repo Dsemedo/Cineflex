@@ -1,10 +1,11 @@
+import { useState } from "react";
 import styled from "styled-components";
 import colors from "./services/colors";
 
-export default function Seat({ s }) {
-  console.log(s);
+export default function Seat({ s, forms }) {
+  const [selected, setSelected] = useState([]);
+
   const {
-    Laranja,
     AzulClaro,
     AzulEscuro,
     CinzaClaro,
@@ -13,15 +14,34 @@ export default function Seat({ s }) {
     AmareloEscuro,
   } = colors;
 
-  if (s.isAvailable === true) {
+  if (selected.includes(s.id)) {
     return (
-      <NumberSeat backColor={CinzaClaro} border={CinzaEscuro}>
+      <NumberSeat selected={selected} backColor={AzulClaro} border={AzulEscuro}>
+        {s.name}
+      </NumberSeat>
+    );
+  } else if (s.isAvailable === true) {
+    return (
+      <NumberSeat
+        selected={selected}
+        backColor={CinzaClaro}
+        border={CinzaEscuro}
+        onClick={() => {
+          setSelected([...selected, s.id]);
+          forms.ids.push(s.id);
+        }}
+      >
         {s.name}
       </NumberSeat>
     );
   } else {
     return (
-      <NumberSeat backColor={AmareloClaro} border={AmareloEscuro}>
+      <NumberSeat
+        selected={selected}
+        backColor={AmareloClaro}
+        border={AmareloEscuro}
+        onClick={() => alert("Esse assento não está disponível")}
+      >
         {s.name}
       </NumberSeat>
     );
@@ -41,4 +61,8 @@ const NumberSeat = styled.div`
   margin-bottom: 20px;
   font-family: "Roboto", sans-seriff;
   font-size: 15px;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;

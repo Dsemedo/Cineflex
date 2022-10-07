@@ -25,7 +25,7 @@ export default function Films() {
     if (imageCard.length === 0) {
       return (
         <Card>
-          <img src={Loading}></img>
+          <img alt="Gif de Loading" src={Loading}></img>
         </Card>
       );
     } else {
@@ -33,7 +33,7 @@ export default function Films() {
         <>
           {imageCard.map((value) => (
             <Link to={`/filme/${value.id}`}>
-              <img src={value.posterURL} />
+              <img alt="Capa do Filme" src={value.posterURL} />
             </Link>
           ))}
         </>
@@ -97,5 +97,3 @@ const Card = styled.div`
     height: 100%;
   }
 `;
-
-const Linked = styled(Link)``;

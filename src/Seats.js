@@ -2,11 +2,14 @@ import styled from "styled-components";
 import colors from "./services/colors";
 import axios from "axios";
 import Seat from "./Seat";
+import Loading from "./assets/img/loading.gif";
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 export default function Seats() {
+  const params = useParams();
+
   const {
-    Laranja,
     AzulClaro,
     AzulEscuro,
     CinzaClaro,
@@ -15,18 +18,44 @@ export default function Seats() {
     AmareloEscuro,
   } = colors;
 
-  const [seatAvailable, setSeatAvailable] = useState([]);
+  const [infoMovie, setinfoMovie] = useState([]);
   const [infoSeats, setInfoSeats] = useState([]);
+
+  const [forms, setForms] = useState({
+    ids: [],
+    name: "",
+    cpf: "",
+  });
+
+  console.log(forms);
+
+  function handleForm(e) {
+    setForms({
+      ...forms,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  function sendOrder(e) {
+    e.preventDefault();
+
+    const promise = axios.post(
+      "https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many",
+      forms
+    );
+
+    promise.then(() => alert("Deu tudo certo"));
+    promise.catch(() => alert("Deu tudo errado"));
+  }
 
   useEffect(() => {
     const promise = axios.get(
-      "https://mock-api.driven.com.br/api/v5/cineflex/showtimes/1/seats"
+      `https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${params.idSessao}/seats`
     );
 
     promise.then((response) => {
-      setSeatAvailable(response.data.movie);
+      setinfoMovie(...infoMovie, response.data);
       setInfoSeats(response.data.seats);
-      console.log(response.data.seats);
     });
 
     promise.catch((erro) => {
@@ -34,20 +63,24 @@ export default function Seats() {
     });
   }, []);
 
+  if (infoMovie.length === 0) {
+    return <img alt="Tela de loading" src={Loading}></img>;
+  }
+
   return (
     <>
       <Description>Selecione o(s) assento(s)</Description>
 
       <AllSeats>
         {infoSeats.map((s) => (
-          <Seat s={s} />
+          <Seat s={s} setForms={setForms} forms={forms} />
         ))}
       </AllSeats>
 
-      <Damn>
+      <Legends>
         <SubtitleSeats>
           <NumberSeat backColor={AzulClaro} border={AzulEscuro} />
-          Disponivel
+          Selecionado
         </SubtitleSeats>
 
         <SubtitleSeats>
@@ -57,14 +90,38 @@ export default function Seats() {
 
         <SubtitleSeats>
           <NumberSeat backColor={AmareloClaro} border={AmareloEscuro} />
-          Disponivel
+          Indisponivel
         </SubtitleSeats>
-      </Damn>
+      </Legends>
+
+      <Form>
+        <label htmlFor="Nome do comprador">Nome do comprador:</label>
+        <input
+          type="text"
+          name="name"
+          placeholder="Digite seu nome..."
+          onChange={handleForm}
+          value={forms.name}
+        />
+        <label htmlFor="CPF do comprador">CPF do comprador:</label>
+        <input
+          type="text"
+          name="cpf"
+          placeholder="Digite seu CPF..."
+          onChange={handleForm}
+          value={forms.cpf}
+        />
+        <button type="submit" onClick={sendOrder}>
+          Reservar assento(s)
+        </button>
+      </Form>
 
       <Footer backColor={CinzaClaro}>
-        <img alt="Foto do filme" src={seatAvailable.posterURL} />
-        <p>{seatAvailable.title}</p>
-        {infoSeats.name}
+        <img alt="Foto do filme" src={infoMovie.movie.posterURL} />
+        <DescriptionFilm>
+          <p>{infoMovie.movie.title}</p>
+          {infoMovie.day.weekday} - {infoMovie.name}
+        </DescriptionFilm>
       </Footer>
     </>
   );
@@ -109,8 +166,8 @@ const Footer = styled.div`
 `;
 
 const NumberSeat = styled.div`
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   background-color: ${(props) => props.backColor};
   border: 1px solid ${(props) => props.border};
@@ -119,7 +176,10 @@ const NumberSeat = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-left: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const SubtitleSeats = styled.div`
@@ -130,8 +190,38 @@ const SubtitleSeats = styled.div`
   align-items: center;
   flex-direction: column;
 `;
-const Damn = styled.div`
+
+const Legends = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  margin-left: 3%;
+  font-family: "Roboto", sans-seriff;
+
+  input {
+    margin: 10px 0px;
+    width: 80%;
+    height: 40px;
+    font-family: "Roboto", sans-seriff;
+    font-style: italic;
+  }
+
+  button {
+    margin: 10% 0 5% 25%;
+    width: 45%;
+    height: 42px;
+    background-color: #e8833a;
+    color: #ffffff;
+    border-radius: 3px;
+  }
+`;
+
+const DescriptionFilm = styled.div`
+  display: flex;
+  flex-direction: column;
 `;

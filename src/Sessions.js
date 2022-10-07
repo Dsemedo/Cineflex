@@ -2,20 +2,19 @@ import colors from "./services/colors";
 import styled from "styled-components";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 export default function Sessions() {
   const { Laranja, CinzaClaro } = colors;
 
   const params = useParams();
-  console.log(params);
 
   const [session, setSession] = useState([]);
   const [filmSelected, setFilmSelected] = useState([]);
 
   useEffect(() => {
     const promise = axios.get(
-      `https://mock-api.driven.com.br/api/v5/cineflex/movies/${params.filmeID}/showtimes`
+      `https://mock-api.driven.com.br/api/v5/cineflex/movies/${params.idFilme}/showtimes`
     );
 
     promise.then((response) => {
@@ -26,10 +25,7 @@ export default function Sessions() {
     promise.catch((erro) => {
       console.log(erro.response.data);
     });
-  }, []);
-
-  console.log(session);
-  console.log(filmSelected);
+  }, [params.idFilme]);
 
   return (
     <>
@@ -40,20 +36,22 @@ export default function Sessions() {
           {value.weekday} - {value.date}
           <AllSessions>
             {value.showtimes.map((h) => (
-              <HourSession
-                key={h.id}
-                backColor={Laranja}
-                onClick={() => console.log(h.id)}
-              >
-                {h.name}
-              </HourSession>
+              <StyledLink to={`/sessao/${h.id}`}>
+                <HourSession
+                  key={h.id}
+                  backColor={Laranja}
+                  onClick={() => console.log(h)}
+                >
+                  {h.name}
+                </HourSession>
+              </StyledLink>
             ))}
           </AllSessions>
         </Day>
       ))}
 
       <Footer backColor={CinzaClaro}>
-        <img src={filmSelected.posterURL} />
+        <img alt="Capa do Filme" src={filmSelected.posterURL} />
         {filmSelected.title}
       </Footer>
     </>
@@ -84,14 +82,17 @@ const HourSession = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80px;
+  width: 100px;
   height: 40px;
   background-color: ${(props) => props.backColor};
-  margin-top: 20px;
-  margin-right: 20px;
   font-size: 15px;
   color: white;
-  border-radius: 2px;
+  border-radius: 5px;
+  border: none;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const AllSessions = styled.div`
@@ -117,4 +118,11 @@ const Footer = styled.div`
     margin-left: 10px;
     margin-right: 10px;
   }
+`;
+
+const StyledLink = styled(Link)`
+  margin-right: 20px;
+  margin-top: 20px;
+  width: 100px;
+  text-decoration: none;
 `;
