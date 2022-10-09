@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
-export default function Sessions() {
+export default function Sessions({ setDataTitle }) {
   const { Laranja, CinzaClaro } = colors;
 
   const params = useParams();
@@ -21,18 +21,16 @@ export default function Sessions() {
       setFilmSelected(response.data);
       setSession(response.data.days);
     });
+  }, []);
 
-    promise.catch((erro) => {
-      console.log(erro.response.data);
-    });
-  }, [params.idFilme]);
+  setDataTitle(filmSelected.title);
 
   return (
     <>
       <Description>Selecione o horário</Description>
 
-      {session.map((value) => (
-        <Day>
+      {session.map((value, i) => (
+        <Day key={i}>
           {value.weekday} - {value.date}
           <AllSessions>
             {value.showtimes.map((h) => (

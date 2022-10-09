@@ -4,11 +4,18 @@ import axios from "axios";
 import Seat from "./Seat";
 import Loading from "./assets/img/loading.gif";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function Seats() {
+export default function Seats({
+  setDataSession,
+  setDataDay,
+  setDataSeats,
+  setDataCPF,
+  setDataName,
+  selected,
+}) {
   const params = useParams();
-
+  const navigate = useNavigate();
   const {
     AzulClaro,
     AzulEscuro,
@@ -20,14 +27,13 @@ export default function Seats() {
 
   const [infoMovie, setinfoMovie] = useState([]);
   const [infoSeats, setInfoSeats] = useState([]);
+  const [nameSeats, setNameSeats] = useState([]);
 
   const [forms, setForms] = useState({
     ids: [],
     name: "",
     cpf: "",
   });
-
-  console.log(forms);
 
   function handleForm(e) {
     setForms({
@@ -44,8 +50,14 @@ export default function Seats() {
       forms
     );
 
-    promise.then(() => alert("Deu tudo certo"));
-    promise.catch(() => alert("Deu tudo errado"));
+    promise.then(
+      () => navigate("/sucesso"),
+      setDataSession(infoMovie.day.weekday),
+      setDataDay(infoMovie.name),
+      setDataSeats(nameSeats),
+      setDataCPF(forms.cpf),
+      setDataName(forms.name)
+    );
   }
 
   useEffect(() => {
@@ -56,10 +68,6 @@ export default function Seats() {
     promise.then((response) => {
       setinfoMovie(...infoMovie, response.data);
       setInfoSeats(response.data.seats);
-    });
-
-    promise.catch((erro) => {
-      console.log(erro.response.data);
     });
   }, []);
 
@@ -72,8 +80,15 @@ export default function Seats() {
       <Description>Selecione o(s) assento(s)</Description>
 
       <AllSeats>
-        {infoSeats.map((s) => (
-          <Seat s={s} setForms={setForms} forms={forms} />
+        {infoSeats.map((s, i) => (
+          <Seat
+            key={i}
+            s={s}
+            setForms={setForms}
+            forms={forms}
+            setNameSeats={setNameSeats}
+            nameSeats={nameSeats}
+          />
         ))}
       </AllSeats>
 
@@ -110,10 +125,10 @@ export default function Seats() {
           placeholder="Digite seu CPF..."
           onChange={handleForm}
           value={forms.cpf}
+          pattern="(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)"
         />
-        <button type="submit" onClick={sendOrder}>
-          Reservar assento(s)
-        </button>
+
+        <SendButton forms={forms} sendOrder={sendOrder} />
       </Form>
 
       <Footer backColor={CinzaClaro}>
@@ -125,6 +140,26 @@ export default function Seats() {
       </Footer>
     </>
   );
+}
+
+function SendButton({ forms, sendOrder }) {
+  if (forms.cpf.length < 10 || forms.name === "") {
+    return (
+      <button
+        onClick={() =>
+          alert("Verifique se preencheu seu nome e CPF corretamente")
+        }
+      >
+        Reservar assento(s)
+      </button>
+    );
+  } else {
+    return (
+      <button type="submit" onClick={sendOrder}>
+        Reservar assento(s)
+      </button>
+    );
+  }
 }
 
 const Description = styled.div`
@@ -224,4 +259,6 @@ const Form = styled.form`
 const DescriptionFilm = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: start;
+  align-items: flex-start;
 `;

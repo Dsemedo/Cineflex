@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import colors from "./services/colors";
 
-export default function Seat({ s, forms }) {
+export default function Seat({ s, forms, setNameSeats, nameSeats }) {
   const [selected, setSelected] = useState([]);
 
   const {
@@ -16,7 +16,12 @@ export default function Seat({ s, forms }) {
 
   if (selected.includes(s.id)) {
     return (
-      <NumberSeat selected={selected} backColor={AzulClaro} border={AzulEscuro}>
+      <NumberSeat
+        selected={selected}
+        backColor={AzulClaro}
+        border={AzulEscuro}
+        onClick={() => selected.splice(selected.indexOf(`${s.name}`), 1)}
+      >
         {s.name}
       </NumberSeat>
     );
@@ -29,6 +34,7 @@ export default function Seat({ s, forms }) {
         onClick={() => {
           setSelected([...selected, s.id]);
           forms.ids.push(s.id);
+          nameSeats.push(s.name);
         }}
       >
         {s.name}

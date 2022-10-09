@@ -31,8 +31,8 @@ export default function Films() {
     } else {
       return (
         <>
-          {imageCard.map((value) => (
-            <Link to={`/filme/${value.id}`}>
+          {imageCard.map((value, i) => (
+            <Link key={i} to={`/filme/${value.id}`}>
               <img alt="Capa do Filme" src={value.posterURL} />
             </Link>
           ))}
