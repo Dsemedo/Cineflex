@@ -1,8 +1,7 @@
-import { useState } from "react";
 import styled from "styled-components";
 import colors from "./services/colors";
 
-export default function Seat({ s, forms, setForms, nameSeats }) {
+export default function Seat({ s, forms, setForms, nameSeats, setNameSeats }) {
   const {
     AzulClaro,
     AzulEscuro,
@@ -17,10 +16,12 @@ export default function Seat({ s, forms, setForms, nameSeats }) {
     let idFilter = [];
     if (idsForm.includes(s.id)) {
       idFilter = idsForm.filter((id) => id !== s.id);
+      // nameSeats.filter((name) => name !== s.name);
+      nameSeats.splice(nameSeats.indexOf(`${s.name}`), 1);
     } else {
       idFilter = [...idsForm, s.id];
+      setNameSeats([...nameSeats, s.name]);
     }
-
     setForms({ ...forms, ids: idFilter });
   }
 

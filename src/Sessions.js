@@ -27,7 +27,11 @@ export default function Sessions({ setDataTitle }) {
   setDataTitle(filmSelected.title);
 
   if (session.length === 0) {
-    return <img alt="Gif de Loading" src={Loading}></img>;
+    return (
+      <Card>
+        <img alt="Gif de Loading" src={Loading} />
+      </Card>
+    );
   } else {
     return (
       <>
@@ -38,11 +42,14 @@ export default function Sessions({ setDataTitle }) {
             {value.weekday} - {value.date}
             <AllSessions>
               {value.showtimes.map((h) => (
-                <StyledLink to={`/sessao/${h.id}`}>
+                <StyledLink
+                  to={`/sessao/${h.id}`}
+                  data-identifier="hour-minute-btn"
+                >
                   <HourSession
+                    data-identifier="session-date"
                     key={h.id}
                     backColor={Laranja}
-                    onClick={() => console.log(h)}
                   >
                     {h.name}
                   </HourSession>
@@ -53,7 +60,11 @@ export default function Sessions({ setDataTitle }) {
         ))}
 
         <Footer backColor={CinzaClaro}>
-          <img alt="Capa do Filme" src={filmSelected.posterURL} />
+          <img
+            data-identifier="movie-img-preview"
+            alt="Capa do Filme"
+            src={filmSelected.posterURL}
+          />
           {filmSelected.title}
         </Footer>
       </>
@@ -128,4 +139,23 @@ const StyledLink = styled(Link)`
   margin-top: 20px;
   width: 100px;
   text-decoration: none;
+`;
+
+const Card = styled.div`
+  margin-left: 10%;
+  width: 80%;
+  height: 180px;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  img {
+    width: 100%;
+    height: 90%;
+  }
 `;

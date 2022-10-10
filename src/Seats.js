@@ -34,8 +34,6 @@ export default function Seats({
     cpf: "",
   });
 
-  console.log(forms.ids);
-
   function handleForm(e) {
     setForms({
       ...forms,
@@ -45,7 +43,6 @@ export default function Seats({
 
   function sendOrder(e) {
     e.preventDefault();
-
     const promise = axios.post(
       "https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many",
       forms
@@ -73,7 +70,11 @@ export default function Seats({
   }, []);
 
   if (infoMovie.length === 0) {
-    return <img alt="Tela de loading" src={Loading}></img>;
+    return (
+      <Card>
+        <img alt="Gif de Loading" src={Loading} />
+      </Card>
+    );
   } else {
     return (
       <>
@@ -82,6 +83,7 @@ export default function Seats({
         <AllSeats>
           {infoSeats.map((s, i) => (
             <Seat
+              data-identifier="seat"
               key={i}
               s={s}
               setForms={setForms}
@@ -94,17 +96,29 @@ export default function Seats({
 
         <Legends>
           <SubtitleSeats>
-            <NumberSeat backColor={AzulClaro} border={AzulEscuro} />
+            <NumberSeat
+              data-identifier="seat-selected-subtitle"
+              backColor={AzulClaro}
+              border={AzulEscuro}
+            />
             Selecionado
           </SubtitleSeats>
 
           <SubtitleSeats>
-            <NumberSeat backColor={CinzaClaro} border={CinzaEscuro} />
+            <NumberSeat
+              data-identifier="seat-available-subtitle"
+              backColor={CinzaClaro}
+              border={CinzaEscuro}
+            />
             Disponivel
           </SubtitleSeats>
 
           <SubtitleSeats>
-            <NumberSeat backColor={AmareloClaro} border={AmareloEscuro} />
+            <NumberSeat
+              data-identifier="seat-unavailable-subtitle"
+              backColor={AmareloClaro}
+              border={AmareloEscuro}
+            />
             Indisponivel
           </SubtitleSeats>
         </Legends>
@@ -112,6 +126,7 @@ export default function Seats({
         <Form>
           <label htmlFor="Nome do comprador">Nome do comprador:</label>
           <input
+            data-identifier="buyer-name-input"
             type="text"
             name="name"
             placeholder="Digite seu nome..."
@@ -120,21 +135,26 @@ export default function Seats({
           />
           <label htmlFor="CPF do comprador">CPF do comprador:</label>
           <input
+            data-identifier="buyer-cpf-input"
             type="text"
             name="cpf"
             placeholder="Digite seu CPF..."
             onChange={handleForm}
             value={forms.cpf}
             pattern="(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)"
-            maxlength="11"
+            maxLength="11"
           />
 
-          <SendButton forms={forms} sendOrder={sendOrder} />
+          <SendButton
+            data-identifier="reservation-btn"
+            forms={forms}
+            sendOrder={sendOrder}
+          />
         </Form>
 
         <Footer backColor={CinzaClaro}>
           <img alt="Foto do filme" src={infoMovie.movie.posterURL} />
-          <DescriptionFilm>
+          <DescriptionFilm data-identifier="movie-and-session-infos-preview">
             <p>{infoMovie.movie.title}</p>
             {infoMovie.day.weekday} - {infoMovie.name}
           </DescriptionFilm>
@@ -145,14 +165,14 @@ export default function Seats({
 }
 
 function SendButton({ forms, sendOrder }) {
-  if (forms.cpf.length < 10 || forms.name === "") {
+  if (forms.cpf.length < 10 || forms.name === "" || forms.ids.length < 1) {
     return (
       <button
         onClick={() =>
           alert("Verifique se preencheu seu nome e CPF corretamente")
         }
       >
-        Reservar assento(s)
+        Preencha seus dados corretamente
       </button>
     );
   } else {
@@ -255,6 +275,7 @@ const Form = styled.form`
     background-color: #e8833a;
     color: #ffffff;
     border-radius: 3px;
+    border: none;
   }
 `;
 
@@ -266,5 +287,24 @@ const DescriptionFilm = styled.div`
 
   p {
     margin-bottom: 5px;
+  }
+`;
+
+const Card = styled.div`
+  margin-left: 10%;
+  width: 80%;
+  height: 180px;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  img {
+    width: 100%;
+    height: 90%;
   }
 `;

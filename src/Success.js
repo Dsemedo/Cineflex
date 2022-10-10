@@ -23,7 +23,7 @@ export default function Sucess({
       <PedidoFeito>
         <span>Pedido feito com sucesso!</span>
       </PedidoFeito>
-      <FilmDetail>
+      <FilmDetail data-identifier="movie-session-infos-reserve-finished">
         <h1>Filme e sessão </h1>
         <p>{dataTitle}</p>
         <h2>
@@ -34,9 +34,9 @@ export default function Sucess({
       <Tickets>
         <h1>Ingressos</h1>
 
-        <PrintSeats />
+        <PrintSeats data-identifier="seat-infos-reserve-finished" />
       </Tickets>
-      <ClientDetails>
+      <ClientDetails data-identifier="buyer-infos-reserve-finished">
         <h1>Comprador</h1>
         <p>Nome: {dataName}</p>
         <h2>
@@ -44,7 +44,7 @@ export default function Sucess({
         </h2>
       </ClientDetails>
 
-      <Link to={"/"}>
+      <Link to={"/"} data-identifier="back-to-home-btn">
         <ButtonHome>Voltar para Home </ButtonHome>
       </Link>
     </>
@@ -103,4 +103,5 @@ const ButtonHome = styled.button`
   background-color: #e8833a;
   color: #ffffff;
   border-radius: 3px;
+  border: none;
 `;

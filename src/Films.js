@@ -23,13 +23,17 @@ export default function Films() {
 
   function PosterCard() {
     if (imageCard.length === 0) {
-      return <img alt="Gif de Loading" src={Loading}></img>;
+      return (
+        <CardLoad>
+          <img alt="Gif de Loading" src={Loading} />
+        </CardLoad>
+      );
     } else {
       return (
         <>
           {imageCard.map((value, i) => (
             <Link key={i} to={`/filme/${value.id}`}>
-              <Card>
+              <Card data-identifier="movie-outdoor">
                 <img alt="Capa do Filme" src={value.posterURL} />
               </Card>
             </Link>
@@ -60,29 +64,21 @@ const Description = styled.div`
 `;
 
 const CardList = styled.div`
-  margin-left: 10%;
-  width: 80%;
+  margin-left: 15%;
+  width: 70%;
+  height: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   padding-top: 10px;
-
-  img {
-    width: 75%;
-    height: 200px;
-    box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);
-    border-radius: 3px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 `;
 
 const Card = styled.div`
   width: 100%;
   height: 180px;
-  margin-bottom: 20px;
+  margin-left: 10%;
+  margin-bottom: 15%;
   box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);
   border: 1px solid #e8833a;
   border-radius: 3px;
@@ -98,4 +94,11 @@ const Card = styled.div`
     width: 90%;
     height: 90%;
   }
+`;
+
+const CardLoad = styled(Card)`
+  height: 90%;
+  width: 100%;
+  box-shadow: none;
+  border: none;
 `;

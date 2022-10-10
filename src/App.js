@@ -16,13 +16,6 @@ export default function App() {
   const [dataName, setDataName] = useState();
   const [dataCPF, setDataCPF] = useState();
 
-  console.log(dataTitle);
-  console.log(dataSession);
-  console.log(dataSeats);
-  console.log(dataDay);
-  console.log(dataName);
-  console.log(dataCPF);
-
   return (
     <>
       <BrowserRouter>
