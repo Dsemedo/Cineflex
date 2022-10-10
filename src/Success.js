@@ -10,9 +10,12 @@ export default function Sucess({
   dataCPF,
 }) {
   function PrintSeats() {
-    for (let i = 0; i <= dataSeats.length; i++) {
-      return <h2>Assento {dataSeats[i]} </h2>;
-    }
+    return dataSeats.map((seats, i) => <h2 key={i}>Assento {seats}</h2>);
+  }
+
+  function FormCPF() {
+    dataCPF = dataCPF.replace(/[^\d]/g, "");
+    return dataCPF.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
   }
 
   return (
@@ -22,7 +25,7 @@ export default function Sucess({
       </PedidoFeito>
       <FilmDetail>
         <h1>Filme e sessão </h1>
-        <h2>{dataTitle}</h2>
+        <p>{dataTitle}</p>
         <h2>
           {dataSession} - {dataDay}
         </h2>
@@ -35,8 +38,9 @@ export default function Sucess({
       </Tickets>
       <ClientDetails>
         <h1>Comprador</h1>
+        <p>Nome: {dataName}</p>
         <h2>
-          Nome: {dataName} CPF: {dataCPF}
+          CPF: <FormCPF />
         </h2>
       </ClientDetails>
 
@@ -65,9 +69,9 @@ const PedidoFeito = styled.div`
 
 const FilmDetail = styled.div`
   margin-left: 2%;
-  margin-bottom: 2%;
+  margin-bottom: 7%;
   width: 90%;
-  height: 100px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   font-family: "Roboto";
@@ -79,6 +83,11 @@ const FilmDetail = styled.div`
   }
 
   h2 {
+    font-size: 22px;
+  }
+
+  p {
+    margin-bottom: 5px;
     font-size: 22px;
   }
 `;

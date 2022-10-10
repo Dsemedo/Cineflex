@@ -1,6 +1,7 @@
 import colors from "./services/colors";
 import styled from "styled-components";
 import axios from "axios";
+import Loading from "../src/assets/img/loading.gif";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
@@ -25,35 +26,39 @@ export default function Sessions({ setDataTitle }) {
 
   setDataTitle(filmSelected.title);
 
-  return (
-    <>
-      <Description>Selecione o horário</Description>
+  if (session.length === 0) {
+    return <img alt="Gif de Loading" src={Loading}></img>;
+  } else {
+    return (
+      <>
+        <Description>Selecione o horário</Description>
 
-      {session.map((value, i) => (
-        <Day key={i}>
-          {value.weekday} - {value.date}
-          <AllSessions>
-            {value.showtimes.map((h) => (
-              <StyledLink to={`/sessao/${h.id}`}>
-                <HourSession
-                  key={h.id}
-                  backColor={Laranja}
-                  onClick={() => console.log(h)}
-                >
-                  {h.name}
-                </HourSession>
-              </StyledLink>
-            ))}
-          </AllSessions>
-        </Day>
-      ))}
+        {session.map((value, i) => (
+          <Day key={i}>
+            {value.weekday} - {value.date}
+            <AllSessions>
+              {value.showtimes.map((h) => (
+                <StyledLink to={`/sessao/${h.id}`}>
+                  <HourSession
+                    key={h.id}
+                    backColor={Laranja}
+                    onClick={() => console.log(h)}
+                  >
+                    {h.name}
+                  </HourSession>
+                </StyledLink>
+              ))}
+            </AllSessions>
+          </Day>
+        ))}
 
-      <Footer backColor={CinzaClaro}>
-        <img alt="Capa do Filme" src={filmSelected.posterURL} />
-        {filmSelected.title}
-      </Footer>
-    </>
-  );
+        <Footer backColor={CinzaClaro}>
+          <img alt="Capa do Filme" src={filmSelected.posterURL} />
+          {filmSelected.title}
+        </Footer>
+      </>
+    );
+  }
 }
 
 const Description = styled.div`

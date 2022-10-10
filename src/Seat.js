@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import colors from "./services/colors";
 
-export default function Seat({ s, forms, setNameSeats, nameSeats }) {
+export default function Seat({ s, forms, nameSeats }) {
   const [selected, setSelected] = useState([]);
 
   const {
@@ -14,13 +14,13 @@ export default function Seat({ s, forms, setNameSeats, nameSeats }) {
     AmareloEscuro,
   } = colors;
 
-  if (selected.includes(s.id)) {
+  if (forms.ids.includes(s.id)) {
     return (
       <NumberSeat
         selected={selected}
         backColor={AzulClaro}
         border={AzulEscuro}
-        onClick={() => selected.splice(selected.indexOf(`${s.name}`), 1)}
+        onClick={() => forms.ids.splice(forms.ids.indexOf(`${s.name}`), 1)}
       >
         {s.name}
       </NumberSeat>

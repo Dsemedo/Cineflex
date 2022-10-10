@@ -23,17 +23,15 @@ export default function Films() {
 
   function PosterCard() {
     if (imageCard.length === 0) {
-      return (
-        <Card>
-          <img alt="Gif de Loading" src={Loading}></img>
-        </Card>
-      );
+      return <img alt="Gif de Loading" src={Loading}></img>;
     } else {
       return (
         <>
           {imageCard.map((value, i) => (
             <Link key={i} to={`/filme/${value.id}`}>
-              <img alt="Capa do Filme" src={value.posterURL} />
+              <Card>
+                <img alt="Capa do Filme" src={value.posterURL} />
+              </Card>
             </Link>
           ))}
         </>
@@ -71,9 +69,8 @@ const CardList = styled.div`
   padding-top: 10px;
 
   img {
-    width: 100%;
+    width: 75%;
     height: 200px;
-    margin-bottom: 30px;
     box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);
     border-radius: 3px;
     display: flex;
@@ -83,17 +80,22 @@ const CardList = styled.div`
 `;
 
 const Card = styled.div`
-  width: 45%;
-  height: 200px;
-  margin-bottom: 30px;
+  width: 100%;
+  height: 180px;
+  margin-bottom: 20px;
   box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e8833a;
   border-radius: 3px;
   display: flex;
   justify-content: center;
   align-items: center;
 
+  &:hover {
+    cursor: pointer;
+  }
+
   img {
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
   }
 `;

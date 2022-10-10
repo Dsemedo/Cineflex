@@ -73,73 +73,74 @@ export default function Seats({
 
   if (infoMovie.length === 0) {
     return <img alt="Tela de loading" src={Loading}></img>;
-  }
+  } else {
+    return (
+      <>
+        <Description>Selecione o(s) assento(s)</Description>
 
-  return (
-    <>
-      <Description>Selecione o(s) assento(s)</Description>
+        <AllSeats>
+          {infoSeats.map((s, i) => (
+            <Seat
+              key={i}
+              s={s}
+              setForms={setForms}
+              forms={forms}
+              setNameSeats={setNameSeats}
+              nameSeats={nameSeats}
+            />
+          ))}
+        </AllSeats>
 
-      <AllSeats>
-        {infoSeats.map((s, i) => (
-          <Seat
-            key={i}
-            s={s}
-            setForms={setForms}
-            forms={forms}
-            setNameSeats={setNameSeats}
-            nameSeats={nameSeats}
+        <Legends>
+          <SubtitleSeats>
+            <NumberSeat backColor={AzulClaro} border={AzulEscuro} />
+            Selecionado
+          </SubtitleSeats>
+
+          <SubtitleSeats>
+            <NumberSeat backColor={CinzaClaro} border={CinzaEscuro} />
+            Disponivel
+          </SubtitleSeats>
+
+          <SubtitleSeats>
+            <NumberSeat backColor={AmareloClaro} border={AmareloEscuro} />
+            Indisponivel
+          </SubtitleSeats>
+        </Legends>
+
+        <Form>
+          <label htmlFor="Nome do comprador">Nome do comprador:</label>
+          <input
+            type="text"
+            name="name"
+            placeholder="Digite seu nome..."
+            onChange={handleForm}
+            value={forms.name}
           />
-        ))}
-      </AllSeats>
+          <label htmlFor="CPF do comprador">CPF do comprador:</label>
+          <input
+            type="text"
+            name="cpf"
+            placeholder="Digite seu CPF..."
+            onChange={handleForm}
+            value={forms.cpf}
+            pattern="(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)"
+            maxlength="11"
+          />
 
-      <Legends>
-        <SubtitleSeats>
-          <NumberSeat backColor={AzulClaro} border={AzulEscuro} />
-          Selecionado
-        </SubtitleSeats>
+          <SendButton forms={forms} sendOrder={sendOrder} />
+        </Form>
 
-        <SubtitleSeats>
-          <NumberSeat backColor={CinzaClaro} border={CinzaEscuro} />
-          Disponivel
-        </SubtitleSeats>
-
-        <SubtitleSeats>
-          <NumberSeat backColor={AmareloClaro} border={AmareloEscuro} />
-          Indisponivel
-        </SubtitleSeats>
-      </Legends>
-
-      <Form>
-        <label htmlFor="Nome do comprador">Nome do comprador:</label>
-        <input
-          type="text"
-          name="name"
-          placeholder="Digite seu nome..."
-          onChange={handleForm}
-          value={forms.name}
-        />
-        <label htmlFor="CPF do comprador">CPF do comprador:</label>
-        <input
-          type="text"
-          name="cpf"
-          placeholder="Digite seu CPF..."
-          onChange={handleForm}
-          value={forms.cpf}
-          pattern="(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)"
-        />
-
-        <SendButton forms={forms} sendOrder={sendOrder} />
-      </Form>
-
-      <Footer backColor={CinzaClaro}>
-        <img alt="Foto do filme" src={infoMovie.movie.posterURL} />
-        <DescriptionFilm>
-          <p>{infoMovie.movie.title}</p>
-          {infoMovie.day.weekday} - {infoMovie.name}
-        </DescriptionFilm>
-      </Footer>
-    </>
-  );
+        <Footer backColor={CinzaClaro}>
+          <img alt="Foto do filme" src={infoMovie.movie.posterURL} />
+          <DescriptionFilm>
+            <p>{infoMovie.movie.title}</p>
+            {infoMovie.day.weekday} - {infoMovie.name}
+          </DescriptionFilm>
+        </Footer>
+      </>
+    );
+  }
 }
 
 function SendButton({ forms, sendOrder }) {
@@ -259,6 +260,10 @@ const Form = styled.form`
 const DescriptionFilm = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: start;
   align-items: flex-start;
+  word-break: normal;
+
+  p {
+    margin-bottom: 5px;
+  }
 `;
