@@ -12,7 +12,6 @@ export default function Seats({
   setDataSeats,
   setDataCPF,
   setDataName,
-  selected,
 }) {
   const params = useParams();
   const navigate = useNavigate();
@@ -34,6 +33,8 @@ export default function Seats({
     name: "",
     cpf: "",
   });
+
+  console.log(forms.ids);
 
   function handleForm(e) {
     setForms({

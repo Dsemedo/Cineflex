@@ -2,9 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import colors from "./services/colors";
 
-export default function Seat({ s, forms, nameSeats }) {
-  const [selected, setSelected] = useState([]);
-
+export default function Seat({ s, forms, setForms, nameSeats }) {
   const {
     AzulClaro,
     AzulEscuro,
@@ -14,36 +12,33 @@ export default function Seat({ s, forms, nameSeats }) {
     AmareloEscuro,
   } = colors;
 
+  function toggle() {
+    const idsForm = forms.ids;
+    let idFilter = [];
+    if (idsForm.includes(s.id)) {
+      idFilter = idsForm.filter((id) => id !== s.id);
+    } else {
+      idFilter = [...idsForm, s.id];
+    }
+
+    setForms({ ...forms, ids: idFilter });
+  }
+
   if (forms.ids.includes(s.id)) {
     return (
-      <NumberSeat
-        selected={selected}
-        backColor={AzulClaro}
-        border={AzulEscuro}
-        onClick={() => forms.ids.splice(forms.ids.indexOf(`${s.name}`), 1)}
-      >
+      <NumberSeat backColor={AzulClaro} border={AzulEscuro} onClick={toggle}>
         {s.name}
       </NumberSeat>
     );
   } else if (s.isAvailable === true) {
     return (
-      <NumberSeat
-        selected={selected}
-        backColor={CinzaClaro}
-        border={CinzaEscuro}
-        onClick={() => {
-          setSelected([...selected, s.id]);
-          forms.ids.push(s.id);
-          nameSeats.push(s.name);
-        }}
-      >
+      <NumberSeat backColor={CinzaClaro} border={CinzaEscuro} onClick={toggle}>
         {s.name}
       </NumberSeat>
     );
   } else {
     return (
       <NumberSeat
-        selected={selected}
         backColor={AmareloClaro}
         border={AmareloEscuro}
         onClick={() => alert("Esse assento não está disponível")}
